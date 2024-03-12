@@ -22,3 +22,19 @@ pub trait Position<T: NumAssign + Copy> {
         self.set_position(new_position);
     }
 }
+
+impl<T: NumAssign + Copy> Position<T> for Point2d<T> {
+    fn position(&self) -> Point2d<T> {
+        *self
+    }
+
+    fn set_position(&mut self, position: Point2d<T>) {
+        *self = position;
+    }
+}
+
+impl<T: NumAssign + Copy> PartialEq<T> for Point2d<T> {
+    fn eq(&self, other: &T) -> bool {
+        self == other
+    }
+}
