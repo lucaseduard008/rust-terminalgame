@@ -1,19 +1,38 @@
+use crate::{point::Point2d, traits::Position};
+
 #[derive(Default)]
 pub struct Player {
+  position: Point2d<f32>,
   speed: f64,
   health: u8
 }
 
+impl Position<f32> for Player {
+  fn position(&self) -> Point2d<f32> {
+      self.position
+  }
+
+  fn set_position(&mut self, position: Point2d<f32>) {
+      self.position = position;
+  }
+}
+
 impl Player {
-  pub fn new() -> PlayerBuilder {
-    PlayerBuilder::default()
+  pub fn new() -> Self {
+    Self::default()
+  }
+
+  pub fn build(&self) -> PlayerBuilder {
+    PlayerBuilder {
+      position: self.position, speed: self.speed, health: self.health
+    }
   }
 
   pub fn is_alive(&self) -> bool {
     if self.health > 0 {
       return true;
     }
-    return false;
+    false
   }
 
   pub fn take_damage(&mut self, damage: u8) {
@@ -31,6 +50,7 @@ impl Player {
 
 #[derive(Default)]
 pub struct PlayerBuilder {
+  position: Point2d<f32>,
   speed: f64,
   health: u8
 }
@@ -38,6 +58,7 @@ pub struct PlayerBuilder {
 impl PlayerBuilder {
   pub fn new() -> Self {
     Self {
+      position: Point2d::new(0.0, 0.0),
       speed: 0f64,
       health: 0
     }
@@ -55,6 +76,7 @@ impl PlayerBuilder {
 
   pub fn build(self) -> Player {
     Player {
+      position: self.position,
       speed: self.speed,
       health: self.health
     }
