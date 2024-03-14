@@ -5,8 +5,15 @@ use num::ToPrimitive;
 use crate::{point::Point2d, traits::Position};
 
 #[derive(Default)]
+struct CollisionStruct {
+  x: u32,
+  y: u32
+}
+
+#[derive(Default)]
 pub struct Player {
   position: Point2d<f32>,
+  direction: CollisionStruct,
   speed: f64,
   health: u8
 }
@@ -28,7 +35,7 @@ impl Player {
 
   pub fn build(&self) -> PlayerBuilder {
     PlayerBuilder {
-      position: self.position, speed: self.speed, health: self.health
+      position: self.position, speed: self.speed, health: self.health, direction: self.direction
     }
   }
 
@@ -74,6 +81,34 @@ impl Player {
     )
     .unwrap();
   }
+
+  pub fn accelerate(&mut self) {
+    if self.speed < 1.0 {
+      self.speed += 0.05;
+    }
+  }
+
+  pub fn decelerate(&mut self) {
+    if self.speed > 0.0 {
+      self.speed -= 0.05;
+    }
+  }
+
+  pub fn move_forward(&mut self) {
+    todo!()
+  }
+  
+  pub fn turn_left(&mut self) {
+    todo!()
+  }
+
+  pub fn turn_right(&mut self) {
+    todo!()
+  }
+
+  pub fn forward_position(&self) -> Point2d<f32> {
+    todo!()
+  }
 }
 
 impl std::fmt::Display for Player {
@@ -85,6 +120,7 @@ impl std::fmt::Display for Player {
 #[derive(Default)]
 pub struct PlayerBuilder {
   position: Point2d<f32>,
+  direction: CollisionStruct,
   speed: f64,
   health: u8
 }
@@ -93,6 +129,7 @@ impl PlayerBuilder {
   pub fn new() -> Self {
     Self {
       position: Point2d::new(0.0, 0.0),
+      direction: CollisionStruct{0, 0},
       speed: 0f64,
       health: 0
     }
@@ -112,7 +149,12 @@ impl PlayerBuilder {
     Player {
       position: self.position,
       speed: self.speed,
-      health: self.health
+      health: self.health,
+      direction: self.direction
     }
+  }
+
+  pub fn direction(self, x: f64, y: f64) {
+    todo!()  
   }
 }
