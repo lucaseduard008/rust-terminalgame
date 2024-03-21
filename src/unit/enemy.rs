@@ -1,6 +1,6 @@
 use num::ToPrimitive;
 
-use crate::{point::Point2d, traits::Position};
+use crate::{point::Point2d, traits::Position, unit::Player};
 
 #[derive(Default)]
 pub struct Enemy {
@@ -45,6 +45,22 @@ impl Enemy {
         crossterm::style::Print(self)
     )
     .unwrap();
+  }
+
+  fn normalize<T>(xy: (T, T)) -> (T, T)
+where
+    T: num::Float,
+{
+    let (x, y) = xy;
+    let magnitude = (x * x + y * y).sqrt();
+    (x / magnitude, y / magnitude)
+}
+
+  pub fn move_towards_player(&mut self, player: &Player) {
+    let relative_direction = player.position()- self.position();
+    let normalized_position = Self::normalize((relative_direction.x, relative_direction.y));
+    let new_position = Point2d::new(normalized_position.0 * self.speed.to_f32().unwrap(), normalized_position.1 * self.speed.to_f32().unwrap());
+    self.position += new_position;
   }
 }
 

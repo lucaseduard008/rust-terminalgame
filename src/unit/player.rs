@@ -2,18 +2,12 @@ use std::fmt::write;
 
 use num::ToPrimitive;
 
-use crate::{point::Point2d, traits::Position};
-
-#[derive(Default)]
-struct CollisionStruct {
-  x: u32,
-  y: u32
-}
+use crate::{point::Point2d, traits::Position, traits::ToU16};
 
 #[derive(Default)]
 pub struct Player {
   position: Point2d<f32>,
-  direction: CollisionStruct,
+  direction: Point2d<f32>,
   speed: f64,
   health: u8
 }
@@ -95,9 +89,14 @@ impl Player {
   }
 
   pub fn move_forward(&mut self) {
-    todo!()
+    self.position.x += self.direction.x * self.speed.to_f32().unwrap();
+    self.position.y += self.direction.y * self.speed.to_f32().unwrap();
   }
   
+  pub fn forward_position(&self) -> Point2d<u16> {
+    self.position.to_u16()
+  }
+
   pub fn turn_left(&mut self) {
     todo!()
   }
@@ -105,22 +104,19 @@ impl Player {
   pub fn turn_right(&mut self) {
     todo!()
   }
-
-  pub fn forward_position(&self) -> Point2d<f32> {
-    todo!()
-  }
 }
 
 impl std::fmt::Display for Player {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-      write!(f, "P")
+    // let direction_variable = todo!();
+    write!(f, "P")
   }
 }
 
 #[derive(Default)]
 pub struct PlayerBuilder {
   position: Point2d<f32>,
-  direction: CollisionStruct,
+  direction: Point2d<f32>,
   speed: f64,
   health: u8
 }
@@ -129,7 +125,7 @@ impl PlayerBuilder {
   pub fn new() -> Self {
     Self {
       position: Point2d::new(0.0, 0.0),
-      direction: CollisionStruct{0, 0},
+      direction: Point2d::new(0.0, 0.0),
       speed: 0f64,
       health: 0
     }
@@ -154,7 +150,8 @@ impl PlayerBuilder {
     }
   }
 
-  pub fn direction(self, x: f64, y: f64) {
-    todo!()  
+  pub fn direction(mut self, x: f32, y: f32) -> Self {
+    self.direction = Point2d::new(x, y);
+    self
   }
 }

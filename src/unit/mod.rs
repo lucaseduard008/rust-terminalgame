@@ -11,3 +11,5 @@ pub use collectible::Collectible;
 
 pub mod wall;
 pub use wall::Wall;
+
+pub mod direction;

@@ -5,7 +5,7 @@ use rand::{
     rngs::ThreadRng,
     Rng,
 };
-use std::ops::Range;
+use std::ops::{Add, AddAssign, Mul, Range, Sub};
 
 // this is only an example, modify it to your needs or remove entirely
 use crate::point::Point2d;
@@ -23,6 +23,32 @@ pub trait Position<T: NumAssign + Copy> {
     }
 }
 
+pub trait ToU16 {
+    fn to_u16(&self) -> Point2d<u16>;
+}
+
+pub trait Round<T> {
+    fn round(&self) -> Point2d<T>;
+}
+
+impl ToU16 for Point2d<f32> {
+    fn to_u16(&self) -> Point2d<u16> {
+        Point2d {
+            x: self.x as u16,
+            y: self.y as u16
+        }
+    }
+}
+
+impl<T: Copy + Into<f32> + From<f32>> Round<T> for Point2d<T> {
+    fn round(&self) -> Point2d<T> {
+        Point2d {
+            x: (self.x.into().round() as f32).into(),
+            y: (self.y.into().round() as f32).into()
+        }
+    }
+}
+
 impl<T: NumAssign + Copy> Position<T> for Point2d<T> {
     fn position(&self) -> Point2d<T> {
         *self
@@ -36,5 +62,46 @@ impl<T: NumAssign + Copy> Position<T> for Point2d<T> {
 impl<T: NumAssign + Copy> PartialEq<T> for Point2d<T> {
     fn eq(&self, other: &T) -> bool {
         self == other
+    }
+}
+
+impl<T: Add<Output = T>> Add for Point2d<T> {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Self {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y
+        }
+    }
+}
+
+impl<T: Add<Output = T> + Copy> AddAssign for Point2d<T> {
+    fn add_assign(&mut self, rhs: Self) {
+        *self = Self {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y
+        }
+    }
+}
+
+impl<T: Mul<Output = T>> Mul for Point2d<T> {
+    type Output = Self;
+    fn mul(self, rhs: Self) -> Self::Output {
+        Self {
+            x: self.x * rhs.x,
+            y: self.y * rhs.y
+        }
+    }
+}
+
+impl<T: Sub<Output = T>> Sub for Point2d<T> {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y
+        }
     }
 }
