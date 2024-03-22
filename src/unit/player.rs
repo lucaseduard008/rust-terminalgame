@@ -1,6 +1,6 @@
 use num::ToPrimitive;
 
-use crate::{point::Point2d, traits::Position, traits::ToU16, unit::Direction};
+use crate::{point::Point2d, traits::{Position, Round, ToU16}, unit::Direction};
 
 #[derive(Default, Clone)]
 pub struct Player {
@@ -95,10 +95,10 @@ impl Player {
   }
   
   pub fn forward_position(&self) -> Point2d<u16> {
-    // don't really like this solution for this
-    let mut next_player_position = self.clone();
-    next_player_position.move_forward();
-    next_player_position.position().to_u16()
+    let direction = self.direction.as_coordinates();
+    let next_x = self.position.x + (direction.0 * self.speed.to_f32().unwrap());
+    let next_y = self.position.y + (direction.1 * self.speed.to_f32().unwrap());
+    Point2d::new(next_x, next_y).round().to_u16()
   }
 
   pub fn turn_left(&mut self) {

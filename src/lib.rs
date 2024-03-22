@@ -3,5 +3,6 @@ pub mod unit;
 
 mod input;
 mod traits;
-pub mod point;
+mod point;
 mod ui;
+mod hud;
