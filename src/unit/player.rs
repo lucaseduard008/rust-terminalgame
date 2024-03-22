@@ -1,13 +1,11 @@
-use std::fmt::write;
-
 use num::ToPrimitive;
 
-use crate::{point::Point2d, traits::Position, traits::ToU16};
+use crate::{point::Point2d, traits::Position, traits::ToU16, unit::Direction};
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct Player {
   position: Point2d<f32>,
-  direction: Point2d<f32>,
+  direction: Direction,
   speed: f64,
   health: u8
 }
@@ -41,7 +39,9 @@ impl Player {
   }
 
   pub fn take_damage(&mut self, damage: u8) {
-    self.health -= damage;
+    if self.health > 0 {
+      self.health -= damage;
+    }
   } 
 
   pub fn health(&self) -> u8 {
@@ -89,34 +89,38 @@ impl Player {
   }
 
   pub fn move_forward(&mut self) {
-    self.position.x += self.direction.x * self.speed.to_f32().unwrap();
-    self.position.y += self.direction.y * self.speed.to_f32().unwrap();
+    let direction = self.direction.as_coordinates();
+    self.position.x += direction.0 * self.speed.to_f32().unwrap();
+    self.position.y += direction.1 * self.speed.to_f32().unwrap();
   }
   
   pub fn forward_position(&self) -> Point2d<u16> {
-    self.position.to_u16()
+    // don't really like this solution for this
+    let mut next_player_position = self.clone();
+    next_player_position.move_forward();
+    next_player_position.position().to_u16()
   }
 
   pub fn turn_left(&mut self) {
-    todo!()
+    self.direction -= 1;
   }
 
   pub fn turn_right(&mut self) {
-    todo!()
+    self.direction += 1;
   }
 }
 
 impl std::fmt::Display for Player {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    // let direction_variable = todo!();
-    write!(f, "P")
+    let direction_arrow = self.direction.to_string();
+    write!(f, "{direction_arrow}")
   }
 }
 
 #[derive(Default)]
 pub struct PlayerBuilder {
   position: Point2d<f32>,
-  direction: Point2d<f32>,
+  direction: Direction,
   speed: f64,
   health: u8
 }
@@ -124,8 +128,8 @@ pub struct PlayerBuilder {
 impl PlayerBuilder {
   pub fn new() -> Self {
     Self {
-      position: Point2d::new(0.0, 0.0),
-      direction: Point2d::new(0.0, 0.0),
+      position: Point2d::new(1.0, 2.0),
+      direction: Direction::South,
       speed: 0f64,
       health: 0
     }
@@ -151,7 +155,8 @@ impl PlayerBuilder {
   }
 
   pub fn direction(mut self, x: f32, y: f32) -> Self {
-    self.direction = Point2d::new(x, y);
+    let point = Point2d::new(x, y);
+    self.direction = Direction::point_as_direction(point);
     self
   }
 }

@@ -57,15 +57,18 @@ where
 }
 
   pub fn move_towards_player(&mut self, player: &Player) {
-    let relative_direction = player.position()- self.position();
+    let relative_direction = player.position() - self.position();
     let normalized_position = Self::normalize((relative_direction.x, relative_direction.y));
-    let new_position = Point2d::new(normalized_position.0 * self.speed.to_f32().unwrap(), normalized_position.1 * self.speed.to_f32().unwrap());
+    let new_position = Point2d::new(
+      normalized_position.0 * self.speed.to_f32().unwrap(), 
+      normalized_position.1 * self.speed.to_f32().unwrap()
+    );
     self.position += new_position;
   }
 }
 
 impl std::fmt::Display for Enemy {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-      write!(f, "E")
+      write!(f, "😠")
   }
 }

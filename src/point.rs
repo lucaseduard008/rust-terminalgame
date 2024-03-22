@@ -1,4 +1,4 @@
-#[derive(Default, PartialEq, Clone, Copy)]
+#[derive(Default, PartialEq, Clone, Copy, Debug)]
 pub struct Point2d<T> {
   pub x: T,
   pub y: T

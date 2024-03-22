@@ -1,4 +1,4 @@
-use num::traits::NumAssign;
+use num::{traits::NumAssign, Num};
 use rand::{
     distributions::{uniform::SampleUniform, Standard},
     prelude::Distribution,
@@ -27,8 +27,8 @@ pub trait ToU16 {
     fn to_u16(&self) -> Point2d<u16>;
 }
 
-pub trait Round<T> {
-    fn round(&self) -> Point2d<T>;
+pub trait Round {
+    fn round(&self) -> Self;
 }
 
 impl ToU16 for Point2d<f32> {
@@ -40,11 +40,11 @@ impl ToU16 for Point2d<f32> {
     }
 }
 
-impl<T: Copy + Into<f32> + From<f32>> Round<T> for Point2d<T> {
-    fn round(&self) -> Point2d<T> {
-        Point2d {
-            x: (self.x.into().round() as f32).into(),
-            y: (self.y.into().round() as f32).into()
+impl Round for Point2d<f32> {
+    fn round(&self) -> Self {
+        Self {
+            x: self.x.round(),
+            y: self.y.round()
         }
     }
 }

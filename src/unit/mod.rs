@@ -13,3 +13,4 @@ pub mod wall;
 pub use wall::Wall;
 
 pub mod direction;
+pub use direction::Direction;
