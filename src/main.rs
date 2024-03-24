@@ -1,4 +1,3 @@
-// replace application with the name of your package
 use finalchapter::{game, unit::Enemy};
 
 fn main() {

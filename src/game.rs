@@ -1,3 +1,5 @@
+// high score counter: 23 :)
+
 use std::{
     io::{stdout, Stdout, Write},
     time::{Duration, Instant},

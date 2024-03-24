@@ -69,6 +69,6 @@ where
 
 impl std::fmt::Display for Enemy {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-      write!(f, "😠")
+      write!(f, "{}", crossterm::style::Stylize::yellow("☹"))
   }
 }
