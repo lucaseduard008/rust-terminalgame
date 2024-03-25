@@ -1,5 +1,3 @@
-pub mod draw;
-
 use std::io::{stdout, Stdout};
 
 use crossterm::{

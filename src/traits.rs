@@ -1,4 +1,4 @@
-use num::{traits::NumAssign, Num};
+use num::traits::NumAssign;
 use rand::{
     distributions::{uniform::SampleUniform, Standard},
     prelude::Distribution,
@@ -7,7 +7,6 @@ use rand::{
 };
 use std::ops::{Add, AddAssign, Mul, Range, Sub};
 
-// this is only an example, modify it to your needs or remove entirely
 use crate::point::Point2d;
 
 pub trait Position<T: NumAssign + Copy> {
@@ -61,7 +60,10 @@ impl<T: NumAssign + Copy> Position<T> for Point2d<T> {
 
 impl<T: NumAssign + Copy> PartialEq<T> for Point2d<T> {
     fn eq(&self, other: &T) -> bool {
-        self == other
+        if self == other {
+            return true;
+        }
+        false
     }
 }
 

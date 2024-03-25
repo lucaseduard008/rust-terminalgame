@@ -2,7 +2,7 @@
 
 use std::{
     io::{stdout, Stdout, Write},
-    time::{Duration, Instant},
+    time::Duration,
 };
 
 use rand::rngs::ThreadRng;
@@ -11,7 +11,7 @@ use crate::{
     hud::Hud,
     input,
     traits::*,
-    ui::{draw::*, UI},
+    ui::UI,
     unit::Collectible,
     unit::Enemy,
     unit::Wall,
